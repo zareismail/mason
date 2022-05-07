@@ -1,5 +1,8 @@
 <?php  
 
+use Zareismail\Mason\Models\MasonLayout;
+use Zareismail\Mason\Nova\Layout; 
+
 return [ 
 
     /*
@@ -14,6 +17,7 @@ return [
     */
    
 	'resources' => [   
+        Layout::class => Layout::class,
 	],
 
     /*
@@ -27,6 +31,21 @@ return [
     */
    
     'models' => [ 
+        Layout::class => MasonLayout::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Mason Model Policy Classes
+    |--------------------------------------------------------------------------
+    |
+    | This configuration option allows you to specify custom policy class
+    | to use instead of the type that ships with Mason.
+    |
+    */
+   
+    'policies' => [ 
+        MasonLayout::class   => \Zareismail\Mason\Policies\Layout::class,
     ],
     
     /*
