@@ -9,22 +9,14 @@ use Zareismail\Cypress\Cypress;
 class ServiceProvider extends LaravelServiceProvider
 {
     /**
-     * The policy mappings for the application.
-     *
-     * @var array
-     */
-    protected $policies = [  
-    ];
-
-    /**
      * Bootstrap any application services.
      *
      * @return void
      */
     public function boot()
     {
-        $this->registerPolicies();
         $this->registerResources();
+        $this->registerPolicies();
 
         Nova::serving(function () {
             $this->servingNova();
@@ -32,6 +24,16 @@ class ServiceProvider extends LaravelServiceProvider
 
         Cypress::discover(app_path('Mason'));
     }   
+
+    /**
+     * Get the policies defined on the provider.
+     *
+     * @return array
+     */
+    public function policies()
+    {
+        return (array) config('mason.policies', []);
+    }
 
     /**
      * Register any Nova serives.
@@ -43,7 +45,7 @@ class ServiceProvider extends LaravelServiceProvider
         Nova::resources((array) config('mason.resources'));
         
         collect(config('mason.models'))->each(function($model, $resource) {
-            Nova::$resourcesByModel[$model] = $resource;
+            Nova::$resourcesByModel[$model] = config("mason.resources.{$resource}");
         });
     }
 
