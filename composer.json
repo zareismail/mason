@@ -1,0 +1,46 @@
+{
+    "name": "zareismail/mason",
+    "description": "The Laravel Nova Interaction tool with the Cypress.",
+    "keywords": [
+        "laravel",
+        "nova",
+        "cypress",
+        "mason"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ismail Zare",
+            "email": "zarehesmaiel@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.3|^8.0",
+        "laravel/nova": "^4.0",
+        "Zareismail/cypress": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zareismail\\Mason\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        },
+        "laravel": {
+            "providers": [
+                "Zareismail\\Mason\\ServiceProvider"
+            ],
+            "aliases": {
+                "Mason": "Zareismail\\Mason\\Mason"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "version": "1.0.0"
+}
