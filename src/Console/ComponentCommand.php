@@ -1,0 +1,72 @@
+<?php
+
+namespace Zareismail\Mason\Console;
+
+use Symfony\Component\Console\Input\InputOption;
+use Zareismail\Cypress\Console\ComponentCommand as Command; 
+
+class ComponentCommand extends Command
+{ 
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'mason:component'; 
+
+    /**
+     * Indicates whether the command should be shown in the Artisan command list.
+     *
+     * @var bool
+     */
+    protected $hidden = true;
+
+    /**
+     * Build the class with the given name.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function buildClass($name)
+    {
+        $component = $this->option('component'); 
+
+        return str_replace('{{ component }}', $component, parent::buildClass($name));
+    }
+
+    /**
+     * Get the default namespace for the class.
+     *
+     * @param  string  $rootNamespace
+     * @return string
+     */
+    protected function getDefaultNamespace($rootNamespace)
+    {
+        return $rootNamespace.'\Mason';
+    }
+
+    /**
+     * Resolve the fully-qualified path to the stub.
+     *
+     * @param  string  $stub
+     * @return string
+     */
+    protected function resolveStubPath($stub)
+    {
+        return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
+            ? $customPath
+            : __DIR__.str_replace('cypress/', '', $stub);
+    }
+
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    { 
+        return array_merge(parent::getOptions(), [
+            ['component', 'c', InputOption::VALUE_REQUIRED, 'The component class being extended.'],
+        ]);
+    }
+}

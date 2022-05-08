@@ -42,6 +42,10 @@ class ServiceProvider extends LaravelServiceProvider
      */
     protected function servingNova()
     {
+        Mason::components([ 
+            Components\Blank::class 
+        ]);
+
         Nova::resources((array) config('mason.resources'));
         
         collect(config('mason.models'))->each(function($model, $resource) {
@@ -56,6 +60,9 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function register()
     { 
+        $this->commands([
+            Console\ComponentCommand::class, 
+        ]);
     }
 
     /**

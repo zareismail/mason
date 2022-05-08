@@ -1,6 +1,8 @@
 <?php  
 
+use Zareismail\Mason\Models\MasonComponent;
 use Zareismail\Mason\Models\MasonLayout;
+use Zareismail\Mason\Nova\Component; 
 use Zareismail\Mason\Nova\Layout; 
 
 return [ 
@@ -17,6 +19,7 @@ return [
     */
    
 	'resources' => [   
+        Component::class => Component::class,
         Layout::class => Layout::class,
 	],
 
@@ -31,6 +34,7 @@ return [
     */
    
     'models' => [ 
+        Component::class => MasonComponent::class,
         Layout::class => MasonLayout::class,
     ],
 
@@ -45,6 +49,7 @@ return [
     */
    
     'policies' => [ 
+        MasonComponent::class   => \Zareismail\Mason\Policies\Component::class,
         MasonLayout::class   => \Zareismail\Mason\Policies\Layout::class,
     ],
     

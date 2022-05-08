@@ -13,6 +13,13 @@ class Mason extends Cypress
      * @var bool
      */
     public static $runsMigrations = false;
+    
+    /**
+     * The registered component names.
+     *
+     * @var array
+     */
+    public static $components = [];
 
     /**
      * Configure Mason to not register its migrations.
@@ -24,6 +31,35 @@ class Mason extends Cypress
         static::$runsMigrations = false;
 
         return new static();
+    }
+
+    /**
+     * Get components from cache.
+     * 
+     * @return \Illuminate\Support\Collection
+     */
+    public static function cachedComponents()
+    {
+        $resource = config('mason.resources.'. Nova\Component::class);
+        $ttl = \Auth::guard(config('nova.guard'))->check() ? 0 : now()->addDay();
+
+        return \Cache::remember($resource::uriKey(), $ttl, function() use ($resource) { 
+            return $resource::newModel()->with('layout')->get();
+        }); 
+    }   
+
+    /**
+     * Forget all of the caches.
+     * 
+     * @return $this
+     */
+    public static function forget()
+    {
+        collect(config('mason.resources'))->each(function($resource) {
+            \Cache::forget($resource::uriKey());
+        });
+
+        return new static;
     }
 
     /**

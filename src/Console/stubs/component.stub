@@ -1,0 +1,10 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ component }} as Component;
+
+class {{ class }} extends Component implements \Zareismail\Cypress\Contracts\Resolvable
+{    
+    use \Zareismail\Mason\ResolvesComponent; 
+}
