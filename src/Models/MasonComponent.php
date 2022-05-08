@@ -11,8 +11,7 @@ class MasonComponent extends Model
     use Concerns\Activable; 
     use Concerns\Fallback;   
     use Concerns\GeneratesOperator;  
-    use Concerns\InteractsWithLayout;  
-    use Concerns\Maintainable;  
+    use Concerns\InteractsWithLayout;   
     use HasFactory;   
 
     /**
