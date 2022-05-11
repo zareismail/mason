@@ -41,11 +41,7 @@ class ServiceProvider extends LaravelServiceProvider
      * @return void
      */
     protected function servingNova()
-    {
-        Mason::components([ 
-            Components\Blank::class 
-        ]);
-
+    { 
         Nova::resources((array) config('mason.resources'));
         
         collect(config('mason.models'))->each(function($model, $resource) {
@@ -62,6 +58,7 @@ class ServiceProvider extends LaravelServiceProvider
     { 
         $this->commands([
             Console\ComponentCommand::class, 
+            Console\FragmentCommand::class, 
         ]);
     }
 

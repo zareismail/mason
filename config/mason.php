@@ -1,8 +1,10 @@
 <?php  
 
 use Zareismail\Mason\Models\MasonComponent;
+use Zareismail\Mason\Models\MasonFragment;
 use Zareismail\Mason\Models\MasonLayout;
 use Zareismail\Mason\Nova\Component; 
+use Zareismail\Mason\Nova\Fragment; 
 use Zareismail\Mason\Nova\Layout; 
 
 return [ 
@@ -20,6 +22,7 @@ return [
    
 	'resources' => [   
         Component::class => Component::class,
+        Fragment::class => Fragment::class,
         Layout::class => Layout::class,
 	],
 
@@ -35,6 +38,7 @@ return [
    
     'models' => [ 
         Component::class => MasonComponent::class,
+        Fragment::class => MasonFragment::class,
         Layout::class => MasonLayout::class,
     ],
 
@@ -50,6 +54,7 @@ return [
    
     'policies' => [ 
         MasonComponent::class   => \Zareismail\Mason\Policies\Component::class,
+        MasonFragment::class   => \Zareismail\Mason\Policies\Fragment::class,
         MasonLayout::class   => \Zareismail\Mason\Policies\Layout::class,
     ],
     

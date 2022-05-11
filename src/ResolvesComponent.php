@@ -18,9 +18,15 @@ trait ResolvesComponent
     { 
         app()->setLocale(static::component()->locale);
 
-        if (is_callable([parent::class, 'resolve']) && ! parent::resolve($request)) {
+        if (is_callable([parent::class, 'resolve']) && parent::resolve($request) === false) {
             return false;
         }
+
+        $this->withMeta([ 
+            'title' => static::component()->title,
+            'subtitle' => static::component()->subtitle,
+            'description' => static::component()->description,
+        ]);
 
         return static::component()->isActive() || \Auth::guard(config('nova.guard'))->check();
     }
@@ -51,7 +57,7 @@ trait ResolvesComponent
      * @return \Illuminate\Database\Eloquent\Model
      */
     public static function component()
-    {
+    { 
         return Mason::cachedComponents()->first(function($component) {
             return $component->cypressOperator() === static::class;
         }); 
@@ -63,8 +69,8 @@ trait ResolvesComponent
      * @return string
      */
     public function fragments(): array
-    {
-        return [];
+    {     
+        return static::component()->fragments->toOperator()->merge(parent::fragments())->toArray();
     }
 
     /**
@@ -75,19 +81,5 @@ trait ResolvesComponent
     public function resolveLayout()
     { 
         return MasonLayout::make(); 
-    }
-
-    /**
-     * Prepare the resource for JSON serialization.
-     *
-     * @return array
-     */
-    public function jsonSerialize()
-    {
-        return array_merge(parent::jsonSerialize(), [ 
-            'title' => static::component()->title,
-            'subtitle' => static::component()->subtitle,
-            'description' => static::component()->description,
-        ]);
-    }
+    } 
 }

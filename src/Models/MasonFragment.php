@@ -3,10 +3,9 @@
 namespace Zareismail\Mason\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Zareismail\Mason\Mason;
+use Illuminate\Database\Eloquent\Model; 
 
-class MasonComponent extends Model
+class MasonFragment extends Model
 {
     use Concerns\Activable; 
     use Concerns\Fallback;   
@@ -20,34 +19,31 @@ class MasonComponent extends Model
      * @var array
      */
     protected $casts = [
-        'active' => 'boolean',
-        'fallback' => 'boolean',
+        'active'    => 'boolean',
+        'fallback'  => 'boolean',
     ];
 
     /**
-     * Perform any actions required after the model boots.
-     *
-     * @return void
+     * Query the rlated MasonComponent.
+     * 
+     * \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    protected static function booted()
+    public function component()
     {
-        static::saved(function() {
-            Mason::forget(); 
-        });
-        static::deleted(function() {
-            Mason::forget();
-        });
+        return $this->belongsTo(MasonComponent::class);
     }
 
     /**
-     * Query the rlated MasonFragment.
-     * 
-     * \Illuminate\Database\Eloquent\Relations\HasOneOrMany
+     * Get corresponding  operator.
+     *
+     * @return string
      */
-    public function fragments()
+    public function cypressOperator()
     {
-        return $this->hasMany(MasonFragment::class, 'component_id');
-    } 
+        return strval(
+            app()->getNamespace() . "Mason\\Fragments\\" . $this->operatorName()
+        );
+    }
 
     /**
      * Get generator command.
@@ -56,11 +52,11 @@ class MasonComponent extends Model
      */
     public function command(): string
     {
-        return 'component';
+        return 'fragment';
     }
 
     /**
-     * Get the `uriKey` of corresponding component.
+     * Get the `uriKey` of corresponding fragment.
      * 
      * @return string
      */
@@ -76,12 +72,12 @@ class MasonComponent extends Model
      * @return string      
      */
     public function getUrl($uri = '')
-    {
+    { 
         if (! $this->isFallback()) {
             $uri = $this->uriKey().'/'.trim($uri, '/');
         }
 
-        return url($uri);
+        return $this->component->getUrl($uri);
     }
 
     /**
@@ -92,6 +88,6 @@ class MasonComponent extends Model
      */
     public function newCollection(array $models = [])
     {
-        return new Collections\ComponentCollection($models);
+        return new Collections\FragmentCollection($models);
     }
 }

@@ -19,7 +19,18 @@ class Mason extends Cypress
      *
      * @var array
      */
-    public static $components = [];
+    public static $components = [
+        \Zareismail\Mason\Cypress\Blank::class,   
+    ];
+
+    /**
+     * The registered fragment names.
+     *
+     * @var array
+     */
+    public static $fragments = [
+        \Zareismail\Mason\Cypress\Fragments\Blank::class,  
+    ];
 
     /**
      * Configure Mason to not register its migrations.
@@ -34,6 +45,31 @@ class Mason extends Cypress
     }
 
     /**
+     * Register the given fragments.
+     *
+     * @param  array  $fragments
+     * @return static
+     */
+    public static function fragments(array $fragments)
+    {
+        static::$fragments = array_unique(
+            array_merge(static::$fragments, $fragments)
+        );
+
+        return new static;
+    } 
+
+    /**
+     * Return the base collection of Cypress fragments.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public static function fragmentCollection()
+    {
+        return Collection::make(static::$fragments);
+    }
+
+    /**
      * Get components from cache.
      * 
      * @return \Illuminate\Support\Collection
@@ -41,10 +77,13 @@ class Mason extends Cypress
     public static function cachedComponents()
     {
         $resource = config('mason.resources.'. Nova\Component::class);
-        $ttl = \Auth::guard(config('nova.guard'))->check() ? 0 : now()->addDay();
 
-        return \Cache::remember($resource::uriKey(), $ttl, function() use ($resource) { 
-            return $resource::newModel()->with('layout')->get();
+        return \Cache::sear($resource::uriKey(), function() use ($resource) { 
+            $callback = function($component) {
+                $component->fragments->each->setRelation('component', $component);
+            };
+
+            return $resource::newModel()->with('layout', 'fragments.layout')->get()->each($callback);
         }); 
     }   
 

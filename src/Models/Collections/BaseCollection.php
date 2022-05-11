@@ -16,4 +16,15 @@ class BaseCollection extends Collection
     { 
         return $this->filter->using($operator);
     }
+
+    /**
+     * Map items to corresponding cypress operator.
+     * 
+     * @param  string $operator 
+     * @return static          
+     */
+    public function toOperator()
+    { 
+        return $this->filter->hasOperator()->map->cypressOperator();
+    }
 }

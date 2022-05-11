@@ -17,11 +17,11 @@
     // renders avaialble plugins that should renders in the header
     $plugins->filterForHead()->toHtml() 
   !!}  
-</head>
+</head> 
 <body 
   data-component="{{ data_get($component, 'uriKey') }}"  
-  data-fragment="@isset($fragment){{ data_get($fragment, 'uriKey') }}@endisset" 
-> 
+  data-fragment="{{ data_get($component, 'fragment.uriKey') }}" 
+>  
   {!! 
     // renders avaialble widgets
     $widgets->toHtml()
